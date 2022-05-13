@@ -35,7 +35,7 @@ class TodoApiView(View):
         }
         if not gid:
             post_status = create_task(data)
-            print(post_status)
+            #print(post_status)
             return HttpResponseRedirect(reverse('todoAPI'))
         put_data = update_task(data, str(gid))
         return HttpResponseRedirect(reverse('todoAPI'))
@@ -64,4 +64,23 @@ def getElement(request):
 
     # return JsonResponse(tasks)
 
+@csrf_exempt
+def postElement(request):
+    name = request.POST.get('name')
+    notes = request.POST.get('notes')
+    #gid = request.POST.get('gid')
+    # print(gid)
+    print(name)
+    print(notes)
+
+    data = {
+        "name": name,
+        "notes": notes,
+        "workspace": ASANA_CONFIG['WORKSPACE'],
+        "assignee": ASANA_CONFIG['ASSIGNEE']
+    }
+    post_status = create_task(data)
+    print(post_status)
+
+    return JsonResponse(post_status)
 
